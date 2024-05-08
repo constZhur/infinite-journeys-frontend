@@ -1,15 +1,19 @@
 import {makeAutoObservable} from "mobx";
 import UserStore from "./modules/UserStore";
+import CommentStore from "./modules/CommentStore";
 import {message, notification} from "antd";
-import $api from "../http";
+import CountryStore from "./modules/CountryStore";
+import TourStore from "./modules/TourStore";
 
 export default class AppStore {
 
+    countries = new CountryStore(this);
+    tours = new TourStore(this);
     users = new UserStore(this);
+    comments = new CommentStore(this);
 
     userState = null;
     isAuthState = false;
-    isSuperAdminState = null;
 
     get isAuth() {
         return this.isAuthState;
@@ -27,24 +31,12 @@ export default class AppStore {
         this.userState = value;
     }
 
-    get isSuperAdmin() {
-        return this.isSuperAdminState;
-    }
-
-    set isSuperAdmin(value) {
-        this.isSuperAdminState = value;
-    }
-
     constructor() {
         makeAutoObservable(this, {
-                courses: false,
-                topics: false,
-                postTypes: false,
-                posts: false,
+                counties: false,
+                tours: false,
                 users: false,
                 comments: false,
-                subjects: false,
-                system: false
             },
             {
                 deep: true
@@ -66,25 +58,9 @@ export default class AppStore {
         const username = JSON.parse(atob(token.split('.')[1])).sub;
         this.user = {id, username, email, role};
         this.isAuth = true;
-
-        this.checkSuperAdmin();
-    }
-
-    checkSuperAdmin = async () => {
-        if (this.user.role === 'ROLE_ADMIN') {
-            try {
-                const response = await $api.get('/users/is-superuser');
-                this.isSuperAdmin = response.data;
-            } catch (e) {
-                this.isSuperAdmin = false;
-            }
-        } else {
-            this.isSuperAdmin = false;
-        }
     }
 
     logout = () => {
-        console.log('logout')
         localStorage.removeItem('token');
         this.user = null;
         this.isAuth = false;
@@ -107,9 +83,7 @@ export default class AppStore {
                             description: e.response.data?.detail,
                         }, 10);
                     }
-
                     break;
-
                 case 403:
                     message.error('Недостаточно прав');
                     break;

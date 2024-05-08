@@ -1,7 +1,6 @@
-import {makeAutoObservable, values} from "mobx";
-//import type AppStore from "../AppStore";
+import { makeAutoObservable } from "mobx";
 import $api from "../../http";
-import {message} from "antd";
+import { message } from "antd";
 import AppStore from "../AppStore";
 
 export default class UserStore {
@@ -21,7 +20,6 @@ export default class UserStore {
     set isLoadingState(state) {
         this.isLoading = state;
     }
-
 
     register = async (values) => {
         try {
@@ -45,7 +43,7 @@ export default class UserStore {
             localStorage.setItem('token', response.data.token);
             this.rootStore.loadUser(response.data.token);
 
-            message.info('С возращением, ' + this.rootStore.user.username + "!");
+            message.info('С возвращением, ' + this.rootStore.user.username + "!");
         } catch (e) {
             this.rootStore.httpError(e);
         } finally {
@@ -53,6 +51,41 @@ export default class UserStore {
         }
     }
 
+    changeUsername = async (values) => {
+        try {
+            this.isLoadingState = true;
+            await $api.patch('/users/change-username', values);
+            message.success('Имя пользователя успешно изменено');
+        } catch (e) {
+            this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
+        }
+    }
+
+    changeEmail = async (values) => {
+        try {
+            this.isLoadingState = true;
+            await $api.patch('/users/change-email', values);
+            message.success('Электронная почта успешно изменена');
+        } catch (e) {
+            this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
+        }
+    }
+
+    changePassword = async (values) => {
+        try {
+            this.isLoadingState = true;
+            await $api.post('/users/change-password', values);
+            message.success('Пароль успешно изменен');
+        } catch (e) {
+            this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
+        }
+    }
 
     getUsersByFilter = async (filter) => {
         try {
@@ -64,6 +97,14 @@ export default class UserStore {
         }
     }
 
+    getProfileInfo = async (username) => {
+        try {
+            const response = await $api.get(`/users/profile/${username}`);
+            return response.data;
+        } catch (e) {
+            this.rootStore.httpError(e);
+        }
+    }
 
     ban = async (id, days, hours, minutes) => {
         try {
@@ -83,7 +124,6 @@ export default class UserStore {
         }
     }
 
-
     unban = async (id) => {
         try {
             await $api.put(`/users/unban/${id}`);
@@ -93,99 +133,106 @@ export default class UserStore {
         }
     }
 
-    changeRole = async (id, role) => {
-        const requestData = {
-            id: id,
-            role: role
-            // другие поля, если они есть
-        };
 
-        const json = JSON.stringify(requestData);
+    delete = async (userId) => {
         try {
-            await $api.put(`/users/change-role`, json);
-            message.success('Роль успешно изменена');
+            this.isLoadingState = true;
+            await $api.post('/users/delete', { userId });
+            message.success('Пользователь успешно удален');
         } catch (e) {
             this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
         }
     }
 
-    getProfileInfo = async (username) => {
+    changeRole = async (values) => {
         try {
-            const response = await $api.get(`/users/profile/${username}`);
+            this.isLoadingState = true;
+            await $api.put('/users/change-role', values);
+            message.success('Роль пользователя успешно изменена');
+        } catch (e) {
+            this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
+        }
+    }
+
+    isSuperuser = async () => {
+        try {
+            this.isLoadingState = true;
+            const response = await $api.get('/users/is-superuser');
             return response.data;
         } catch (e) {
             this.rootStore.httpError(e);
+            return false;
+        } finally {
+            this.isLoadingState = false;
         }
     }
 
-    changePassword = async (values) => {
+    getCurrentBalance = async () => {
         try {
-            const json = JSON.stringify({
-                oldPassword: values.oldPassword,
-                newPassword: values.newPassword
-            });
-            await $api.post(`/users/change-password`, json);
-            message.success('Пароль успешно изменен');
-            return true;
+            this.isLoadingState = true;
+            const response = await $api.get('/users/balance');
+            return response.data;
         } catch (e) {
             this.rootStore.httpError(e);
+            return null;
+        } finally {
+            this.isLoadingState = false;
         }
-        return false;
     }
 
-    changeUsername = async (values) => {
+    topUpBalance = async (amount) => {
         try {
-            const json = JSON.stringify({
-                username: values.username
-            });
-            await $api.post(`/users/change-username`, json);
-            message.success('Имя пользователя успешно изменено');
-            return true;
+            this.isLoadingState = true;
+            await $api.post('/users/top-up-balance', { amount });
+            message.success('Баланс успешно пополнен');
         } catch (e) {
             this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
         }
-        return false;
     }
 
-    changeEmail = async (values) => {
+    withdrawFromBalance = async (amount) => {
         try {
-            const json = JSON.stringify({
-                email: values.email
-            });
-            await $api.post(`/users/change-email`, json);
-            message.success('Email успешно изменен');
-            return true;
+            this.isLoadingState = true;
+            await $api.post('/users/withdraw-from-balance', { amount });
+            message.success('Сумма успешно списана с баланса');
         } catch (e) {
             this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
         }
-        return false;
-    }
-    changeInfo = async (values) => {
-        try {
-            const json = JSON.stringify({
-                realName: values.realName,
-                about: values.about,
-                gender: values.gender
-            });
-            await $api.post(`/users/change-info`, json);
-            message.success('Информация успешно изменена');
-            return true;
-        } catch (e) {
-            this.rootStore.httpError(e);
-        }
-        return false;
     }
 
-    delete = async (values) => {
+    buyOrder = async (orderRequest) => {
         try {
-            const json = JSON.stringify(values);
-            console.log(json)
-            await $api.post(`/users/delete`, json);
-            message.success('Аккаунт успешно удален');
-            return true;
+            this.isLoadingState = true;
+            const response = await $api.post('/users/buy-order', orderRequest);
+            message.success('Заказ успешно совершен');
+            return response.data;
         } catch (e) {
             this.rootStore.httpError(e);
+            return null;
+        } finally {
+            this.isLoadingState = false;
         }
-        return false;
+    }
+
+    getMyOrders = async () => {
+        try {
+            this.isLoadingState = true;
+            const response = await $api.get('/users/my-orders');
+            console.log(response.data)
+            return response.data;
+        } catch (e) {
+            this.rootStore.httpError(e);
+            return null;
+        } finally {
+            this.isLoadingState = false;
+        }
     }
 }
