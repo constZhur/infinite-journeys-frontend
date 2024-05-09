@@ -13,6 +13,8 @@ import ToursPage from "./pages/tours/ToursPage";
 import TourPage from "./pages/tours/TourPage";
 import CreateUpdateTourPage from "./pages/tours/CreateUpdateTourPage";
 import MyToursPage from "./pages/tours/MyToursPage";
+import CountriesPage from "./pages/countries/CountriesPage";
+import CreateUpdateCountryPage from "./pages/countries/CreateUpdateCountryPage";
 
 function App() {
     return (
@@ -32,9 +34,9 @@ function App() {
                 <Route path={'/tours/:tourId'} element={<TourPage/>}/>
                 <Route path={'/my-tours'} element={<MyToursPage/>}/>
 
-                <Route path={'/counties'} element={<ToursPage/>}/>
-                <Route path={'/counties/create'} element={<CreateUpdateTourPage/>}/>
-                <Route path={'/counties/update/:tourId'} element={<CreateUpdateTourPage/>}/>
+                <Route path={'/countries'} element={<CountriesPage/>}/>
+                <Route path={'/countries/create'} element={<CreateUpdateCountryPage/>}/>
+                <Route path={'/countries/update/:countryId'} element={<CreateUpdateCountryPage/>}/>
 
                 <Route path={'/404'} element={<Page404/>}/>
                 <Route path={'/logout'} element={<LogoutComponent/>}/>

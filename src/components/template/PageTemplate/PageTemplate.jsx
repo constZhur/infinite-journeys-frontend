@@ -63,7 +63,7 @@ const PageTemplate = ({children, title}) => {
                                 Туры
                             </Button>
                         </Link>
-                        <Link to={"/counties"}>
+                        <Link to={"/countries"}>
                             <Button type={"dashed"}>
                                 Страны
                             </Button>
