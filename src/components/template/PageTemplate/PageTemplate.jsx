@@ -25,8 +25,6 @@ const PageTemplate = ({children, title}) => {
         ]
 
 
-
-
         if (store.isAdmin()) {
             tmp.push({
                 type: "divider"
@@ -54,30 +52,25 @@ const PageTemplate = ({children, title}) => {
                 store.isAuth &&
                 <>
                     <div className={st.goHome}>
-                        <Link to={"/"}>
-                            <Button type={"dashed"}>
-                                На главную
-                            </Button>
-                        </Link>
                         <Button type={"dashed"} onClick={() => window.history.back()}>
                             Назад
                         </Button>
 
                     </div>
-                    <div className={st.goPosts}>
-                        <Link to={"/wishlists"}>
+                    <div className={st.goTours}>
+                        <Link to={"/tours"}>
                             <Button type={"dashed"}>
-                                Wishlists
+                                Туры
                             </Button>
                         </Link>
-                        <Link to={"/booking"}>
+                        <Link to={"/counties"}>
                             <Button type={"dashed"}>
-                                Booking
+                                Страны
                             </Button>
                         </Link>
-                        <Link to={"/subscriptions"}>
+                        <Link to={"/my-tours"}>
                             <Button type={"dashed"}>
-                                Saves
+                                Мои Туры
                             </Button>
                         </Link>
 
