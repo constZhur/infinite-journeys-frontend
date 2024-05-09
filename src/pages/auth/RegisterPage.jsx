@@ -1,9 +1,9 @@
 import React, {useContext, useEffect} from 'react';
+import PageTemplate from "../../components/template/PageTemplate/PageTemplate";
 import {Context} from "../../index";
 import {Button, Card, Form, Input} from "antd";
 import {Link, useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
-import PageTemplate from "../../components/template/PageTemplate/PageTemplate";
 
 const RegisterPage = () => {
     const {store} = useContext(Context);
@@ -13,14 +13,14 @@ const RegisterPage = () => {
 
     useEffect(() => {
         if (store.isAuth) {
-            navigate('/');
+            navigate('/tours');
         }
     }, [navigate, store.isAuth]);
 
     return (
         <PageTemplate>
-            <Card className={'max-w-xl mx-auto mt-48'} title={'Регистрация'}
-                  extra={<Link to={'/login'} className={'text-gray-400'}>Войти</Link>}>
+            <Card className={'max-w-xl mx-auto mt-16'} title={'Регистрация'}
+                  extra={<Link to={'/login'} className={'text-blue-500'}>Войти</Link>}>
                 <Form
                     form={form}
                     name="register"
