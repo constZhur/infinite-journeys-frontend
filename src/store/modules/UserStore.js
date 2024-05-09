@@ -54,7 +54,8 @@ export default class UserStore {
     changeUsername = async (values) => {
         try {
             this.isLoadingState = true;
-            await $api.patch('/users/change-username', values);
+            console.log(values);
+            await $api.put('/users/change-username', values);
             message.success('Имя пользователя успешно изменено');
         } catch (e) {
             this.rootStore.httpError(e);
@@ -66,7 +67,9 @@ export default class UserStore {
     changeEmail = async (values) => {
         try {
             this.isLoadingState = true;
-            await $api.patch('/users/change-email', values);
+            const json = JSON.stringify(values);
+            console.log(json);
+            await $api.put('/users/change-email', json);
             message.success('Электронная почта успешно изменена');
         } catch (e) {
             this.rootStore.httpError(e);
@@ -77,8 +80,10 @@ export default class UserStore {
 
     changePassword = async (values) => {
         try {
+            const json = JSON.stringify(values);
+            console.log(values);
             this.isLoadingState = true;
-            await $api.post('/users/change-password', values);
+            await $api.post('/users/change-password', json);
             message.success('Пароль успешно изменен');
         } catch (e) {
             this.rootStore.httpError(e);
@@ -149,8 +154,24 @@ export default class UserStore {
     changeRole = async (values) => {
         try {
             this.isLoadingState = true;
-            await $api.put('/users/change-role', values);
+            const json = JSON.stringify(values)
+            console.log(values);
+            await $api.put('/users/change-role', json);
             message.success('Роль пользователя успешно изменена');
+        } catch (e) {
+            this.rootStore.httpError(e);
+        } finally {
+            this.isLoadingState = false;
+        }
+    }
+
+    changeGender = async (values) => {
+        try {
+            this.isLoadingState = true;
+            const json = JSON.stringify(values)
+            console.log(values);
+            await $api.put('/users/change-gender', json);
+            message.success('Пол пользователя успешно изменена');
         } catch (e) {
             this.rootStore.httpError(e);
         } finally {
