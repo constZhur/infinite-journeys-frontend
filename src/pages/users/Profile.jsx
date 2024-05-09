@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../../index";
 import PageTemplate from "../../../../../WebstormProjects/infinite-journeys-frontend/src/components/template/PageTemplate/PageTemplate";
-import { Card, Divider, Tag, Avatar } from "antd";
+import { Card, Divider, Tag, Avatar, Button, Modal, Input, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import DateTimeService from "../../service/DateTimeService";
 
@@ -11,6 +11,9 @@ const Profile = () => {
     const { store } = useContext(Context);
     const [user, setUser] = useState({});
     const [actions, setActions] = useState([]);
+    const [isTopUpModalVisible, setIsTopUpModalVisible] = useState(false); // Состояние видимости модального окна для пополнения счета
+    const [isWithdrawModalVisible, setIsWithdrawModalVisible] = useState(false); // Состояние видимости модального окна для снятия со счета
+    const [amount, setAmount] = useState(''); // Состояние для хранения суммы для пополнения или снятия
 
     useEffect(() => {
         store.users.getProfileInfo(username).then(data => setUser(data))
@@ -41,6 +44,45 @@ const Profile = () => {
     }, [store, store.users, user?.id, username]);
 
     const colors = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
+
+    const handleTopUp = () => {
+        setIsTopUpModalVisible(true);
+    };
+
+    const handleWithdraw = () => {
+        setIsWithdrawModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsTopUpModalVisible(false);
+        setIsWithdrawModalVisible(false);
+    };
+
+    const handleConfirmTopUp = async () => {
+        try {
+            await store.users.topUpBalance(amount);
+            setIsTopUpModalVisible(false);
+            message.success('Баланс успешно пополнен');
+            // Обновление данных пользователя после успешного пополнения счета
+            await store.users.getProfileInfo(username).then(data => setUser(data));
+        } catch (error) {
+            console.error('Error topping up balance:', error);
+            message.error('Произошла ошибка при пополнении баланса');
+        }
+    };
+
+    const handleConfirmWithdraw = async () => {
+        try {
+            await store.users.withdrawFromBalance(amount);
+            setIsWithdrawModalVisible(false);
+            message.success('Сумма успешно списана с баланса');
+            // Обновление данных пользователя после успешного снятия со счета
+            await store.users.getProfileInfo(username).then(data => setUser(data));
+        } catch (error) {
+            console.error('Error withdrawing from balance:', error);
+            message.error('Произошла ошибка при списании суммы с баланса');
+        }
+    };
 
     return (
         <PageTemplate title={`Профиль ${user?.username}`}>
@@ -102,11 +144,47 @@ const Profile = () => {
                                         }
                                     </p>
                                 </div>
+                                <div className={'flex flex-row justify-between mb-1.5 pb-2'}>
+                                    <p className={'text-gray-500'}>Баланс</p>
+                                    <p>{user?.balance}</p>
+                                </div>
+                                <div className={'flex flex-col'}>
+                                    <Button type="primary" onClick={handleTopUp} style={{ marginBottom: '8px' }}>Пополнить счет</Button>
+                                    <Button type="primary" onClick={handleWithdraw}>Снять со счета</Button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </Card>
             </div>
+            {/* Модальное окно для пополнения счета */}
+            <Modal
+                title="Пополнение счета"
+                visible={isTopUpModalVisible}
+                onOk={handleConfirmTopUp}
+                onCancel={handleCancel}
+            >
+                <Input
+                    type="number"
+                    value={amount}
+                    onChange={e => setAmount(e.target.value)}
+                    placeholder="Введите сумму для пополнения"
+                />
+            </Modal>
+            {/* Модальное окно для снятия со счета */}
+            <Modal
+                title="Снятие со счета"
+                visible={isWithdrawModalVisible}
+                onOk={handleConfirmWithdraw}
+                onCancel={handleCancel}
+            >
+                <Input
+                    type="number"
+                    value={amount}
+                    onChange={e => setAmount(e.target.value)}
+                    placeholder="Введите сумму для снятия"
+                />
+            </Modal>
         </PageTemplate>
     );
 };
