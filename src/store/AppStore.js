@@ -105,7 +105,7 @@ export default class AppStore {
         return this.user?.role === 'ROLE_ADMIN';
     }
 
-    isModerator(): boolean {
-        return this.user?.role === 'ROLE_MODERATOR' || this.isAdmin();
+    isSeller(): boolean {
+        return this.user?.role === 'ROLE_SELLER';
     }
 }
