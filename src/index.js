@@ -19,7 +19,7 @@ export const Context = createContext({
 root.render(
     <React.StrictMode>
         <Context.Provider value={{store}}>
-            <ConfigProvider theme={{algorithm: theme.darkAlgorithm}} locale={ruRU}>
+            <ConfigProvider theme={{algorithm: theme.defaultAlgorithm}} locale={ruRU}>
                 <BrowserRouter>
                     <App/>
                 </BrowserRouter>

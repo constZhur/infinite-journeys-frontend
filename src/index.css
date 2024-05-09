@@ -1,13 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Anta, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(99.96deg, #040c38 9.99%, #0a2b5b 100%);
+  background: #d6dcdc;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
+}
+
+.cardList {
+  @apply w-full h-full flex justify-center pt-24 gap-5 flex-wrap;
+}
+
+.custom-dark-modal .ant-modal-content {
+  background: linear-gradient(99.96deg, #040c38 9.99%, #14448c 100%);
+  background: #e6eaea;
+  @apply w-full h-full flex justify-center pt-24 gap-5 flex-wrap;
 }
