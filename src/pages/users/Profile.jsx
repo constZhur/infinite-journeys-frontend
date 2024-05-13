@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../../index";
-import PageTemplate from "../../../../../WebstormProjects/infinite-journeys-frontend/src/components/template/PageTemplate/PageTemplate";
 import { Card, Divider, Tag, Avatar, Button, Modal, Input, message } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import DateTimeService from "../../service/DateTimeService";
+import PageTemplate from "../../components/template/PageTemplate/PageTemplate";
+
 
 const Profile = () => {
     const { username } = useParams();

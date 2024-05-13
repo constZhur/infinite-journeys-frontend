@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import PageTemplate from "../../../../../WebstormProjects/infinite-journeys-frontend/src/components/template/PageTemplate/PageTemplate";
+import PageTemplate from "../../components/template/PageTemplate/PageTemplate";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {
     Button,

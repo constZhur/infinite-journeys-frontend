@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import {Context} from "../../index";
 import {Button, Card, Form, Input, Select} from "antd";
-import PageTemplate from "../../../../../WebstormProjects/infinite-journeys-frontend/src/components/template/PageTemplate/PageTemplate";
+import PageTemplate from "../../components/template/PageTemplate/PageTemplate";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 
 const Settings = () => {
