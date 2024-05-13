@@ -115,7 +115,7 @@ const TourPage = () => {
                                             width={200}
                                             height={200}
                                             className={'object-cover'}
-                                            src={`http://localhost:8080/files/download/${image?.id}`}
+                                            src={`http://77.246.158.253:8080/files/download/${image?.id}`}
                                         />
                                     )
                                 )}

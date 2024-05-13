@@ -48,7 +48,7 @@ const CreateUpdateTourPage = () => {
                             uid: file?.id,
                             name: file?.originalName + '.' + file?.extension,
                             status: 'done',
-                            url: `http://localhost:8080/files/download/${file?.id}`
+                            url: `http://77.246.158.253:8080/files/download/${file?.id}`
                         }))
                     ]
                 });
@@ -56,7 +56,7 @@ const CreateUpdateTourPage = () => {
                     uid: file?.id,
                     name: file?.originalName + '.' + file?.extension,
                     status: 'done',
-                    url: `http://localhost:8080/files/download/${file?.id}`
+                    url: `http://77.246.158.253:8080/files/download/${file?.id}`
                 })));
             };
             fetchData();
